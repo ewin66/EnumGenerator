@@ -1,0 +1,7 @@
+﻿<#@ include file="EnumGeneratorInclude.t4" #>
+namespace T4Practice
+{
+<#
+	GenerateEnum("data source=.;initial catalog=TestDatabase;integrated security=True;", "Directions", "DirectionEnum", "DirectionId", "DirectionName");
+#>
+}

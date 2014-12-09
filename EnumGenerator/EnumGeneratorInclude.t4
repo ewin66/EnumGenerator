@@ -1,0 +1,28 @@
+﻿<#@ assembly name="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#+
+void GenerateEnum(string connectionString, string tableName, string enumName, string enumValueColumn, string enumNameColumn)
+{
+	using (var connection = new SqlConnection(connectionString))
+	{
+		connection.Open();
+		var command = connection.CreateCommand();
+		command.CommandText = string.Format("SELECT T.{0}, T.{1} FROM {2} as T", enumValueColumn, enumNameColumn, tableName);
+		var reader = command.ExecuteReader();
+		var firstTime = true;
+#>
+public enum <#= enumName #>
+{
+<#+
+		while (reader.Read())
+		{
+#>
+	<#= Convert.ToString(reader[enumNameColumn]) #> = <#= Convert.ToInt32(reader[enumValueColumn]) #>, 
+<#+
+		}
+#>
+}
+<#+
+	}				
+}
+#>
